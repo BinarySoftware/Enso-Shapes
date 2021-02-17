@@ -38,19 +38,33 @@ return class ShapesVisualization extends Visualization {
           return new this.paper.Path.Circle({
             center: [0,0],
             radius: data.radius,
-            strokeColor: "black",
-            fillColor: "black"
+            strokeColor: data.stroke || "gray",
+            fillColor: data.fill || "black"
           });
+        case 'Line':
+            return new this.paper.Path.Line({
+              from: [data.ax, data.ay],
+              to: [data.bx, data.by],
+              strokeColor: data.stroke || "black",
+            });
         case 'Rectangle':
           return new this.paper.Path.Rectangle({
             point: [-data.width/2, -data.height/2],
             size: [data.width, data.height],
-            strokeColor: "black",
-            fillColor: "black"
+            strokeColor: data.stroke || "gray",
+            fillColor: data.fill || "black"
           });
         case 'Translate':
           var shape = this.render(data.shape);
           shape.position = shape.position.add([data.tx, data.ty]);
+          return shape;
+        case 'Rotate':
+          var shape = this.render(data.shape);
+          shape.rotate(data.degrees);
+          return shape;
+        case 'Scale':
+          var shape = this.render(data.shape);
+          shape.scale(data.sx, data.sy);
           return shape;
       }
     }
